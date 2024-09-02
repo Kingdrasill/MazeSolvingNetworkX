@@ -1,11 +1,11 @@
 import networkx as nx
-import matplotlib.pyplot as plt
 import ast as at
 import math
 import time as tm
 import tracemalloc as tr
 import openpyxl as op
 import openpyxl.styles as op_st
+import statistics as st
 from sys import argv
 
 def find_dfs_path(G, source, target):
@@ -68,6 +68,10 @@ for j in sizes:
     # Tabela Tempo de Execução
     sheet.append(['BFS', 'DFS', 'A*M', 'A*C', 'A*E', 'A*E2', '', 'BFS', 'DFS', 'A*M', 'A*C', 'A*E', 'A*E2', '', 'BFS', 'DFS', 'A*M', 'A*C', 'A*E', 'A*E2'])
 
+    total_times = [[], [], [], [], [], []]
+    total_mems = [[], [], [], [], [], []]
+    total_opts = [[], [], [], [], [], []]
+
     for i in range(int(argv[1])):
         file = open(f"mazes/{j}/{i+1}.txt", "r")
         G = nx.Graph()
@@ -98,8 +102,8 @@ for j in sizes:
                             G.add_edge(node, (node[0], node[1]+1), weight = 1)
         
         times = list()
-        memories = list([''])
-        paths = list([''])
+        memories = list()
+        paths = list()
 
         tr.start()
         incio = tm.time()
@@ -179,6 +183,30 @@ for j in sizes:
         memories.append(mem_usada[1] / 1024)
         paths.append(1 if len(path) == len(bfs_path) else 0)
 
-        sheet.append([*times, *memories, *paths])        
+        sheet.append([*times, *[''], *memories, *[''], *paths])
+
+        for i in range(len(total_times)):
+            total_times[i].append(times[i])
+            total_mems[i].append(memories[i])
+            total_opts[i].append(paths[i])
+
+    time_averages = list()
+    mem_averages = list()
+    opt_count = list()
+    for i in range(len(total_times)):
+        time_averages.append(st.mean(total_times[i]))
+        mem_averages.append(st.mean(total_mems[i]))
+        opt_count.append(total_opts[i].count(1))
+    sheet.append([])
+    sheet.append([*time_averages, *[''], *mem_averages, *[''], *opt_count])
+
+    time_variances = list()
+    mem_variances = list()
+    opt_pcts = list()
+    for i in range(len(total_times)):
+        time_variances.append(st.stdev(total_times[i]))
+        mem_variances.append(st.stdev(total_mems[i]))
+        opt_pcts.append((opt_count[i] / int(argv[1]) * 100))
+    sheet.append([*time_variances, *[''], *mem_variances, *[''], *opt_pcts])
 
 excel.save('data.xlsx')
