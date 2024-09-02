@@ -48,7 +48,7 @@ finish_position = (size, size)
 # Create the maze
 m = pm.maze(size, size)
 
-f = open(f"test-maze.txt", "w")  
+f = open(f"mazes/test-maze.txt", "w")  
 
 # Create the maze with the random finish position
 m.CreateMaze(finish_position[0], finish_position[1], loopPercent=20, theme='light')
@@ -62,7 +62,7 @@ string = string[:-2]
 f.write(string)
 f.close()
 
-file = open(f"test-maze.txt", "r")
+file = open(f"mazes/test-maze.txt", "r")
 
 G = nx.Graph()
 positions = file.readline().strip().split('-')

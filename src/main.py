@@ -209,4 +209,5 @@ for j in sizes:
         opt_pcts.append((opt_count[i] / int(argv[1]) * 100))
     sheet.append([*time_variances, *[''], *mem_variances, *[''], *opt_pcts])
 
-excel.save('data.xlsx')
+file_data = input('Qual o nome do arquivo de onde vai guardar os dados (.xlsx): ')
+excel.save(f'datas/{file_data}')
