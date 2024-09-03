@@ -1,49 +1,12 @@
 import networkx as nx
 import ast as at
-import math
 import time as tm
 import tracemalloc as tr
 import openpyxl as op
 import openpyxl.styles as op_st
 import statistics as st
+import methods as mt
 from sys import argv
-
-def find_dfs_path(G, source, target):
-    predecessors = nx.dfs_predecessors(G, source)
-    path = [target]
-    while target != source:
-        target = predecessors[target]
-        path.append(target)
-    path.reverse()
-    return path
-
-def manhattan(u, v):
-    (x1, y1) = (u[0], u[1])
-    (x2, y2) = (v[0], v[1])
-    dx = abs(x1 - x2)
-    dy = abs(y1 - y2)
-    return (dx + dy)
-
-def chebyshev(u, v):
-    (x1, y1) = (u[0], u[1])
-    (x2, y2) = (v[0], v[1])
-    dx = abs(x1 - x2)
-    dy = abs(y1 - y2)
-    return max(dx, dy)
-
-def euclidian(u, v):
-    (x1, y1) = (u[0], u[1])
-    (x2, y2) = (v[0], v[1])
-    dx = abs(x1 - x2)
-    dy = abs(y1 - y2)
-    return math.sqrt(dx * dx + dy * dy)
-
-def euclidian_squared(u, v):
-    (x1, y1) = (u[0], u[1])
-    (x2, y2) = (v[0], v[1])
-    dx = abs(x1 - x2)
-    dy = abs(y1 - y2)
-    return (dx * dx + dy * dy)
 
 excel = op.Workbook()
 
@@ -121,7 +84,7 @@ for j in sizes:
         tr.start()
         incio = tm.time()
         tm.sleep(0.001)
-        path = find_dfs_path(G, start, finish)
+        path = mt.find_dfs_path(G, start, finish)
         fim = tm.time()
         mem_usada = tr.get_traced_memory()
         tr.stop()
@@ -134,7 +97,7 @@ for j in sizes:
         tr.start()
         incio = tm.time()
         tm.sleep(0.001)
-        path = nx.astar_path(G, source=start, target=finish, heuristic=lambda u, v: manhattan(u, v), weight='weight')
+        path = nx.astar_path(G, source=start, target=finish, heuristic=lambda u, v: mt.Manhattan(u, v), weight='weight')
         fim = tm.time()
         mem_usada = tr.get_traced_memory()
         tr.stop()
@@ -147,7 +110,7 @@ for j in sizes:
         tr.start()
         incio = tm.time()
         tm.sleep(0.001)
-        path = nx.astar_path(G, source=start, target=finish, heuristic=lambda u, v: chebyshev(u, v), weight='weight')
+        path = nx.astar_path(G, source=start, target=finish, heuristic=lambda u, v: mt.Chebyshev(u, v), weight='weight')
         fim = tm.time()
         mem_usada = tr.get_traced_memory()
         tr.stop()
@@ -160,7 +123,7 @@ for j in sizes:
         tr.start()
         incio = tm.time()
         tm.sleep(0.001)
-        path = nx.astar_path(G, source=start, target=finish, heuristic=lambda u, v: euclidian(u, v), weight='weight')
+        path = nx.astar_path(G, source=start, target=finish, heuristic=lambda u, v: mt.Euclidian(u, v), weight='weight')
         fim = tm.time()
         mem_usada = tr.get_traced_memory()
         tr.stop()
@@ -173,7 +136,7 @@ for j in sizes:
         tr.start()
         incio = tm.time()
         tm.sleep(0.001)
-        path = nx.astar_path(G, source=start, target=finish, heuristic=lambda u, v: euclidian_squared(u, v), weight='weight')
+        path = nx.astar_path(G, source=start, target=finish, heuristic=lambda u, v: mt.Euclidian_squared(u, v), weight='weight')
         fim = tm.time()
         mem_usada = tr.get_traced_memory()
         tr.stop()
