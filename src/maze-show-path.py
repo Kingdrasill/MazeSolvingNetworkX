@@ -50,12 +50,12 @@ chebyshev.position = start
 euclidiana.position = start
 euclidiana2.position = start
 
-bfs_path = nx.shortest_path(G, source=start, target=finish)
+bfs_path = mt.find_bfs_path(G, source=start, target=finish)
 dfs_path = mt.find_dfs_path(G, start, finish)
-manhattan_path = nx.astar_path(G, source=start, target=finish, heuristic=lambda u, v: mt.Manhattan(u, v), weight='weight')
-chebyshev_path = nx.astar_path(G, source=start, target=finish, heuristic=lambda u, v: mt.Chebyshev(u, v), weight='weight')
-euclidiana_path = nx.astar_path(G, source=start, target=finish, heuristic=lambda u, v: mt.Euclidian(u, v), weight='weight')
-euclidiana2_path = nx.astar_path(G, source=start, target=finish, heuristic=lambda u, v: mt.Euclidian_squared(u, v), weight='weight')
+manhattan_path = mt.astar_shortest_path(G, source=start, target=finish, heuristic=mt.Manhattan)
+chebyshev_path = mt.astar_shortest_path(G, source=start, target=finish, heuristic=mt.Chebyshev)
+euclidiana_path = mt.astar_shortest_path(G, source=start, target=finish, heuristic=mt.Euclidian)
+euclidiana2_path = mt.astar_shortest_path(G, source=start, target=finish, heuristic=mt.Euclidian_squared)
 
 m.tracePath({
     bfs: bfs_path
